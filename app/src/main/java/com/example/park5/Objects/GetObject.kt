@@ -8,16 +8,17 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 object GetObject {
 
-    /*private val moshi = Moshi.Builder().
-            add(KotlinJsonAdapterFactory()).
-            build()*/
+    private var retrofit: Retrofit? = null
+    private val BASE_URL = "https://openparking.stockholm.se/LTF-Tolken/v1/"
 
-//@TODO doesnt work yet, working on it
-    val retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://openparking.stockholm.se/LTF-Tolken/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(GetInterface::class.java)
-    }
+    val retrofitInstance:Retrofit?
+        get() {
+            if(retrofit == null){
+                retrofit = Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            }
+            return retrofit
+        }
 }
