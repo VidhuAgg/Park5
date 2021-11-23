@@ -2,7 +2,11 @@ package com.example.park5
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import com.example.park5.Interface.GetInterface
+import com.example.park5.Objects.GetObject
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -11,6 +15,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.park5.databinding.ActivityMapsBinding
+import com.example.retrotry.network.Get
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -26,6 +34,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // to read json output
+        /*val x:Double = 0.0
+        val y:Double = 0.0
+        val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
+        val call = service?.getPost()
+        call?.enqueue(object: Callback<Get> {
+            override fun onResponse(call: Call<Get>, response: Response<Get>) {
+                val body = response.body()
+                body?.features?.forEach {
+                    x = it.geometry.coordinates[0][0].toDouble()
+                    y = it.geometry.coordinates[0][1].toDouble()
+                    Log.d("test_X:",x.toString())
+                }
+            }
+
+            override fun onFailure(call: Call<Get>, t: Throwable) {
+                Toast.makeText(applicationContext,"Error reading JSON", Toast.LENGTH_LONG).show()
+            }
+        })*/
     }
 
     /**
