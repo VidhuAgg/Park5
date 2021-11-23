@@ -35,6 +35,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        //var drawer = findViewById(R.id.drawer_layout)
+
         // to read json output
         /*val x:Double = 0.0
         val y:Double = 0.0
