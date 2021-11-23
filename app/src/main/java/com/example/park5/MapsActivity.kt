@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import android.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.park5.Interface.GetInterface
 import com.example.park5.Objects.GetObject
 
@@ -19,11 +21,14 @@ import com.example.retrotry.network.Get
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private lateinit var draw:DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +40,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        draw = findViewById<DrawerLayout>(R.id.drawer_layout)
         setSupportActionBar(findViewById(R.id.toolbar))
+
+        val toggle = ActionBarDrawerToggle(this,draw,findViewById(R.id.toolbar),R.string.navigation_drawer_open,R.string.navigation_drawer_close)
+        draw.addDrawerListener(toggle)
+        toggle.syncState()
 
         //var drawer = findViewById(R.id.drawer_layout)
 
@@ -58,6 +68,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(applicationContext,"Error reading JSON", Toast.LENGTH_LONG).show()
             }
         })*/
+    }
+
+    override fun onBackPressed() {
+        if(draw.isDrawerOpen(GravityCompat.START)){
+            draw.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     /**
