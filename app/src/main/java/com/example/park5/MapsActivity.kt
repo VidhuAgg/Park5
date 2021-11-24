@@ -3,6 +3,7 @@ package com.example.park5
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.Toolbar
@@ -23,8 +24,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
+import com.google.android.material.navigation.NavigationView
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener{
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -36,16 +39,30 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
 
-        draw = findViewById<DrawerLayout>(R.id.drawer_layout)
+
         setSupportActionBar(findViewById(R.id.toolbar))
+        draw = findViewById<DrawerLayout>(R.id.drawer_layout)
+
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
 
         val toggle = ActionBarDrawerToggle(this,draw,findViewById(R.id.toolbar),R.string.navigation_drawer_open,R.string.navigation_drawer_close)
         draw.addDrawerListener(toggle)
         toggle.syncState()
+
+        if(savedInstanceState == null){
+            //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,findViewById<SupportMapFragment>(R.id.map)).commit()
+            val mapFragment = supportFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
+            navigationView.setCheckedItem(R.id.map)
+        }
+
+
+        //
+
+
 
         //var drawer = findViewById(R.id.drawer_layout)
 
@@ -95,4 +112,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in STOCKHOLM"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.nav_account){
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_Myaccount()).commit()
+        } else {
+            if(item.itemId == R.id.nav_help)
+            {
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_help()).commit()
+            } else {
+                if(item.itemId == R.id.nav_history){
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_history()).commit()
+                } else {
+                    if(item.itemId == R.id.nav_settings){
+                        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_settings()).commit()
+                    } else {
+                        if(item.itemId == R.id.nav_support){
+                            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_support()).commit()
+                        }
+                    }
+                }
+            }
+        }
+
+        draw.closeDrawer(GravityCompat.START)
+        return true
+    }
 }
+
