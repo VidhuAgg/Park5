@@ -51,11 +51,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
         draw.addDrawerListener(toggle)
         toggle.syncState()
 
+        //getting  ap fragment
+        val mapFragment = supportFragmentManager
+        .findFragmentById(R.id.map) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
+
+
+        //val toremove =
+
+
+        //mapFragment.getMapAsync(this)
         if(savedInstanceState == null){
-            //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,findViewById<SupportMapFragment>(R.id.map)).commit()
-            val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
+            //supportFragmentManager.beginTransaction().show(mapFragment).remove(supportFragmentManager
+              //  .findFragmentById(R.id.fragment_container) as SupportMapFragment).commit()
+            //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,mapFragment).commit()
+            //supportFragmentManager.beginTransaction().remove(mapFragment).commit()
+            //supportFragmentManager.executePendingTransactions()
+            //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,mapFragment).commit()
             navigationView.setCheckedItem(R.id.map)
         }
 
