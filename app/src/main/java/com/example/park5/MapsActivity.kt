@@ -33,6 +33,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var draw:DrawerLayout
+    //var x:Double = 0.0
+    //var y:Double = 0.0
+    //list for storing latlang of parking spots
+    var places = ArrayList<LatLng>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +63,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
 
         val fab: View = findViewById(R.id.parking)
         fab.setOnClickListener { view ->
+            findPos()
+            mMap.addMarker(MarkerOptions().position(places[0]).title("Here"))
             Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .show()
         }
 
-
-        //val toremove =
 
 
         //mapFragment.getMapAsync(this)
@@ -83,28 +87,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
         //
 
 
-
         //var drawer = findViewById(R.id.drawer_layout)
 
         // to read json output
-        /*val x:Double = 0.0
-        val y:Double = 0.0
+        /**/
+    }
+
+    fun findPos() {
+
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
         val call = service?.getPost()
         call?.enqueue(object: Callback<Get> {
             override fun onResponse(call: Call<Get>, response: Response<Get>) {
-                val body = response.body()
+                var body = response.body()
                 body?.features?.forEach {
-                    x = it.geometry.coordinates[0][0].toDouble()
-                    y = it.geometry.coordinates[0][1].toDouble()
-                    Log.d("test_X:",x.toString())
+                    places[0] = it.geometry.coordinates[0]
+                    //places.get(0).latitude =
+                    //y = it.geometry.coordinates[0][1]
+                    Log.d("x",places[0].latitude.toString())
+                    Log.d("y",places[0].longitude.toString())
                 }
             }
 
             override fun onFailure(call: Call<Get>, t: Throwable) {
                 Toast.makeText(applicationContext,"Error reading JSON", Toast.LENGTH_LONG).show()
             }
-        })*/
+        })
+
     }
 
     override fun onBackPressed() {
