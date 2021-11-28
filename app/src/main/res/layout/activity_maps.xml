@@ -36,12 +36,21 @@
                 map:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <!-- Temporary bottom navigation bar for idea-->
+            <!--<com.google.android.material.bottomappbar.BottomAppBar
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_gravity="bottom"
+                map:menu="@menu/bottom_navigation"
+                />-->
+
+
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:layout_height="75dp"
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:id="@+id/bottom_nav"
-                map:menu="@menu/drawer_menu" />
+                map:menu="@menu/bottom_navigation"
+                android:background="@color/purple_500"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/parking"

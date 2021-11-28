@@ -25,6 +25,8 @@ import retrofit2.Response
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationMenu
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
@@ -61,14 +63,60 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
         .findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
-        val fab: View = findViewById(R.id.parking)
+        val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomnav.menu.getItem(0).isCheckable=false
+
+        BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
+            when (item.itemId) {
+
+                R.id.nearme -> {
+                    item.isCheckable=true //here is the magic
+
+                    //notify the listener
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.pay ->{
+                    item.isCheckable=true
+
+                    //notify the listener
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.park ->{
+                    //go to forgot user fragment
+                    item.isCheckable=true
+
+                    //notify the listener
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.savedLoc ->{
+                    //go to forgot user fragment
+                    item.isCheckable=true
+
+                    //notify the listener
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.report ->{
+                    //go to forgot user fragment
+                    item.isCheckable=true
+
+                    //notify the listener
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                else -> false
+            }
+
+
+        }
+
+        /*val fab: View = findViewById(R.id.parking)
         fab.setOnClickListener { view ->
             findPos()
             mMap.addMarker(MarkerOptions().position(places[0]).title("Here"))
             Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .show()
-        }
+        }*/
 
 
 
@@ -92,6 +140,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
         // to read json output
         /**/
     }
+
+
 
     fun findPos() {
 
