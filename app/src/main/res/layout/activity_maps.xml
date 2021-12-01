@@ -43,9 +43,35 @@
                 map:menu="@menu/bottom_navigation"
                 />-->
 
+               <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:layout_height="75dp"
+                    android:layout_gravity="bottom"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/bottom_nav_left"
+                    map:menu="@menu/bottom_navigation" />
+
+            <LinearLayout
+                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_gravity="bottom">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/parkcenter"
+                    android:layout_weight="@integer/google_play_services_version"
+                    android:src="@drawable/ic_parkcenter" />
+            </LinearLayout>
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:layout_height="75dp"
+                    android:layout_gravity="bottom"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/bottom_nav_right"
+                    map:menu="@menu/bottom_navigation" /> -->
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:id="@+id/bottom_nav"
