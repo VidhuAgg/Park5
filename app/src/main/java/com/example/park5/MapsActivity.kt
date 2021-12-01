@@ -130,10 +130,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
                 var sp = LatLng(73.8567, 18.5204)
                     findPos(){result ->
                         Log.d("lol",result.toString())
-                        mMap.addMarker(result?.let { MarkerOptions().position(it).title("Here") })
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
-                        mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
+                        if (result != null) {
+                            for(item in result){
+                                mMap.addMarker(MarkerOptions().position(LatLng(item[1],item[0])).title("Here"))
+                            }
+                        }
+                        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
+                        //mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                        //mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
                         Log.d("letsee",result.toString())
                     }
 
@@ -168,7 +172,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
 
 
 
-    fun findPos(callback:(LatLng?)-> Unit){
+    fun findPos(callback:(ArrayList<ArrayList<Double>>?)-> Unit){
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
         val call = service?.getPost()
         call?.enqueue(object: Callback<Get> {
@@ -176,8 +180,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
                 var body = response.body()
                 body?.features?.forEach {
                     places = it.geometry.coordinates
-                    var sp = LatLng(places[0][1],places[0][0])
-                    callback(sp)
+                    callback(places)
                 }
             }
             override fun onFailure(call: Call<Get>, t: Throwable) {
