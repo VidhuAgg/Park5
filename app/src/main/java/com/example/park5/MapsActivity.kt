@@ -1,7 +1,13 @@
 package com.example.park5
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Build
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -25,23 +31,32 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.retrotry.network.Geometry
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomnavigation.BottomNavigationMenu
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener{
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
+    NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    private lateinit var draw:DrawerLayout
-    //var x:Double = 0.0
-    //var y:Double = 0.0
+    private lateinit var draw: DrawerLayout
+
     //list for storing latlang of parking spots
     private var places = ArrayList<ArrayList<Double>>()
 
@@ -50,7 +65,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
 
 
         setSupportActionBar(findViewById(R.id.toolbar))
@@ -59,59 +74,63 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val toggle = ActionBarDrawerToggle(this,draw,findViewById(R.id.toolbar),R.string.navigation_drawer_open,R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            draw,
+            findViewById(R.id.toolbar),
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         draw.addDrawerListener(toggle)
         toggle.syncState()
 
-        //getting map fragment
+        //getting map fragment & Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
-        .findFragmentById(R.id.map) as? SupportMapFragment
+            .findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
         //to set buttons on navigation bar unchecked when starts
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomnav.menu.getItem(0).isCheckable=false
+        bottomnav.menu.getItem(0).isCheckable = false
 
-        //val bottomnav_right = findViewById<BottomNavigationView>(R.id.bottom_nav_right)
-        //bottomnav_right.menu.getItem(0).isCheckable=false
 
-        //image in between two bottom views
-        //val image = findViewById<ImageView>(R.id.parkcenter)
-        //image.elevation = 10F
+        //for the center button
+        // @TODO fix this
         bottomnav.itemIconTintList = null
 
+        //bottomnav seletor
         BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
 
                 R.id.nearme -> {
-                    item.isCheckable=true //here is the magic
+                    item.isCheckable = true //here is the magic
 
                     //notify the listener
                     return@OnNavigationItemSelectedListener true
                 }
-                R.id.pay ->{
-                    item.isCheckable=true
+                R.id.pay -> {
+                    item.isCheckable = true
 
                     //notify the listener
                     return@OnNavigationItemSelectedListener true
                 }
-                R.id.park ->{
+                R.id.park -> {
                     //go to forgot user fragment
-                    item.isCheckable=true
+                    item.isCheckable = true
 
                     //notify the listener
                     return@OnNavigationItemSelectedListener true
                 }
-                R.id.savedLoc ->{
+                R.id.savedLoc -> {
                     //go to forgot user fragment
-                    item.isCheckable=true
+                    item.isCheckable = true
 
                     //notify the listener
                     return@OnNavigationItemSelectedListener true
                 }
-                R.id.report ->{
+                R.id.report -> {
                     //go to forgot user fragment
-                    item.isCheckable=true
+                    item.isCheckable = true
 
                     //notify the listener
                     return@OnNavigationItemSelectedListener true
@@ -124,58 +143,45 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
         }
 
         //press button to find spots and add markers
-
-            var fab: View = findViewById(R.id.parking)
-            fab.setOnClickListener { view ->
-                var sp = LatLng(73.8567, 18.5204)
-                    findPos(){result ->
-                        Log.d("lol",result.toString())
-                        if (result != null) {
-                            for(item in result){
-                                mMap.addMarker(MarkerOptions().position(LatLng(item[1],item[0])).title("Here"))
-                            }
-                        }
-                        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
-                        //mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                        //mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
-                        Log.d("letsee",result.toString())
+        var fab: View = findViewById(R.id.parking)
+        fab.setOnClickListener { view ->
+            var sp = LatLng(73.8567, 18.5204)
+            findPos() { result ->
+                Log.d("lol", result.toString())
+                if (result != null) {
+                    for (item in result) {
+                        mMap.addMarker(
+                            MarkerOptions().position(LatLng(item[1], item[0])).title("Here")
+                        )
                     }
+                }
+                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
+                //mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                //mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
+                Log.d("letsee", result.toString())
+            }
 
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null)
-                    .show()
+            //@TODO("temporary to see if button is being pressed")
+            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
         }
 
-
-
-
-        //mapFragment.getMapAsync(this)
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             //supportFragmentManager.beginTransaction().show(mapFragment).remove(supportFragmentManager
-              //  .findFragmentById(R.id.fragment_container) as SupportMapFragment).commit()
+            //  .findFragmentById(R.id.fragment_container) as SupportMapFragment).commit()
             //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,mapFragment).commit()
             //supportFragmentManager.beginTransaction().remove(mapFragment).commit()
             //supportFragmentManager.executePendingTransactions()
             //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,mapFragment).commit()
             navigationView.setCheckedItem(R.id.map)
         }
-
-
-        //
-
-
-        //var drawer = findViewById(R.id.drawer_layout)
-
-        // to read json output
-        /**/
     }
 
-
-
-    fun findPos(callback:(ArrayList<ArrayList<Double>>?)-> Unit){
+    fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
         val call = service?.getPost()
-        call?.enqueue(object: Callback<Get> {
+        call?.enqueue(object : Callback<Get> {
             override fun onResponse(call: Call<Get>, response: Response<Get>) {
                 var body = response.body()
                 body?.features?.forEach {
@@ -183,14 +189,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
                     callback(places)
                 }
             }
+
             override fun onFailure(call: Call<Get>, t: Throwable) {
-                Toast.makeText(applicationContext,"Error reading JSON", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Error reading JSON", Toast.LENGTH_LONG).show()
             }
         })
     }
 
     override fun onBackPressed() {
-        if(draw.isDrawerOpen(GravityCompat.START)){
+        if (draw.isDrawerOpen(GravityCompat.START)) {
             draw.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
@@ -208,28 +215,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnN
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(59.3490990, 18.0968296)
-        //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in STOCKHOLM"))
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
+
     //function for selecting fragments in navigation drawer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.nav_account){
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_Myaccount()).commit()
+        if (item.itemId == R.id.nav_account) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Fragment_Myaccount()).commit()
         } else {
-            if(item.itemId == R.id.nav_help)
-            {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_help()).commit()
+            if (item.itemId == R.id.nav_help) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, Fragment_help()).commit()
             } else {
-                if(item.itemId == R.id.nav_history){
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_history()).commit()
+                if (item.itemId == R.id.nav_history) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, Fragment_history()).commit()
                 } else {
-                    if(item.itemId == R.id.nav_settings){
-                        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_settings()).commit()
+                    if (item.itemId == R.id.nav_settings) {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, Fragment_settings()).commit()
                     } else {
-                        if(item.itemId == R.id.nav_support){
-                            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,Fragment_support()).commit()
+                        if (item.itemId == R.id.nav_support) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, Fragment_support()).commit()
                         }
                     }
                 }
