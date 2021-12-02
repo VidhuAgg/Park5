@@ -1,7 +1,10 @@
 package com.example.park5
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
 import android.os.Build
 
@@ -23,8 +26,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.example.park5.databinding.ActivityMapsBinding
 import com.example.retrotry.network.Get
 import retrofit2.Call
@@ -42,8 +43,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationMenu
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -65,8 +65,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         setSupportActionBar(findViewById(R.id.toolbar))
         draw = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -92,7 +90,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //to set buttons on navigation bar unchecked when starts
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomnav.menu.getItem(0).isCheckable = false
-
 
         //for the center button
         // @TODO fix this
@@ -151,7 +148,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 if (result != null) {
                     for (item in result) {
                         mMap.addMarker(
-                            MarkerOptions().position(LatLng(item[1], item[0])).title("Here")
+                            MarkerOptions().position(LatLng(item[1], item[0])).title("Here").icon(
+                                bitmapDescriptorFromVector(
+                                    applicationContext,
+                                    R.drawable.ic_parksymbol
+                                )
+                            )
                         )
                     }
                 }
@@ -194,6 +196,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 Toast.makeText(applicationContext, "Error reading JSON", Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+        return ContextCompat.getDrawable(context, vectorResId)?.run {
+            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+            val bitmap =
+                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+            draw(Canvas(bitmap))
+            BitmapDescriptorFactory.fromBitmap(bitmap)
+        }
     }
 
     override fun onBackPressed() {
