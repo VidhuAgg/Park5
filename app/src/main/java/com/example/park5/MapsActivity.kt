@@ -88,12 +88,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mapFragment?.getMapAsync(this)
 
         //to set buttons on navigation bar unchecked when starts
-        val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomnav.menu.getItem(0).isCheckable = false
+        //val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        //bottomnav.menu.getItem(0).isCheckable = false
+
+        val bottomnav_left = findViewById<BottomNavigationView>(R.id.bottom_nav_left)
+        val bottomnav_right = findViewById<BottomNavigationView>(R.id.bottom_nav_right)
+        bottomnav_left.menu.getItem(0).isCheckable = false
+        bottomnav_right.menu.getItem(0).isCheckable = false
+
 
         //for the center button
         // @TODO fix this
-        bottomnav.itemIconTintList = null
+        //ottomnav.itemIconTintList = null
 
         //bottomnav seletor
         BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
@@ -148,7 +154,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 if (result != null) {
                     for (item in result) {
                         mMap.addMarker(
-                            MarkerOptions().position(LatLng(item[1], item[0])).title("Here").icon(
+                            MarkerOptions().position(LatLng(item[1], item[0])).title("here").icon(
                                 bitmapDescriptorFromVector(
                                     applicationContext,
                                     R.drawable.ic_parksymbol

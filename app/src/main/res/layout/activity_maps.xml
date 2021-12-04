@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MapsActivity"
-    >
+    tools:context=".MapsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,15 +16,15 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
+            android:layout_height="match_parent">
+            <!-- Can be ignored -->
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible" />
-
+            <!-- Can be ignored -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -35,49 +34,37 @@
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 map:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <!-- Temporary bottom navigation bar for idea-->
-            <!--<com.google.android.material.bottomappbar.BottomAppBar
-                android:layout_width="match_parent"
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav_left"
+                android:layout_width="wrap_content"
                 android:layout_height="75dp"
                 android:layout_gravity="bottom"
                 map:menu="@menu/bottom_navigation"
-                />-->
-
-               <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:layout_height="75dp"
-                    android:layout_gravity="bottom"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/bottom_nav_left"
-                    map:menu="@menu/bottom_navigation" />
+                android:background="@color/purple_500"/>
 
             <LinearLayout
-                android:layout_height="100dp"
                 android:layout_width="match_parent"
+                android:layout_height="100dp"
                 android:layout_gravity="bottom">
 
+                <!-- For the image i want in the middle -->
                 <ImageView
+                    android:id="@+id/parkcenter"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:id="@+id/parkcenter"
-                    android:layout_weight="@integer/google_play_services_version"
+                    android:layout_gravity="center"
                     android:src="@drawable/ic_parkcenter" />
             </LinearLayout>
 
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:layout_height="75dp"
-                    android:layout_gravity="bottom"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/bottom_nav_right"
-                    map:menu="@menu/bottom_navigation" /> -->
-
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:layout_height="wrap_content"
+                android:id="@+id/bottom_nav_right"
+                android:layout_width="wrap_content"
+                android:layout_height="75dp"
                 android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:id="@+id/bottom_nav"
                 map:menu="@menu/bottom_navigation"
                 android:background="@color/purple_500"/>
 
+            <!-- Can be ignored -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/parking"
                 android:layout_width="wrap_content"
@@ -89,10 +76,8 @@
 
         </FrameLayout>
 
-
-
     </LinearLayout>
-
+    <!-- Can be ignored -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -102,127 +87,4 @@
         map:menu="@menu/drawer_menu" />
 
 
-
-
-</androidx.drawerlayout.widget.DrawerLayout><!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MapsActivity" >
-
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="470dp"
-        android:layout_marginTop="80dp"
-        android:visibility="visible" />
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="111dp"
-        android:layout_gravity="bottom"
-        android:backgroundTint="#CBDDD1"
-        tools:ignore="BottomAppBar" />
-
-    <ImageButton
-        android:id="@+id/locateme"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF"
-        android:scaleType="fitStart"
-        android:tint="#272727"
-        android:translationX="0dp"
-        android:translationY="570dp"
-        map:srcCompat="@drawable/ic_near_me_black_48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <ImageButton
-        android:id="@+id/Pay"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitStart"
-        android:tint="#272727"
-        android:translationX="70dp"
-        android:translationY="570dp"
-        map:srcCompat="@drawable/ic_monetization_on_black_48dp" />
-
-    <ImageButton
-        android:id="@+id/Park"
-        android:layout_width="130dp"
-        android:layout_height="134dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitStart"
-        android:translationX="140dp"
-        android:translationY="500dp"
-        map:srcCompat="@drawable/ic_meter" />
-
-    <ImageButton
-        android:id="@+id/savedloc"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitStart"
-        android:tint="#272727"
-        android:translationX="270dp"
-        android:translationY="570dp"
-        map:srcCompat="@drawable/ic_beenhere_black_48dp" />
-
-    <ImageButton
-        android:id="@+id/Report"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        android:tint="#272727"
-        android:translationX="340dp"
-        android:translationY="570dp"
-        map:srcCompat="@drawable/ic_report_black_48dp" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
-
-    <ImageButton
-        android:id="@+id/logo"
-        android:layout_width="82dp"
-        android:layout_height="80dp"
-        android:background="#00FFFFFF"
-        android:scaleX="0.25"
-        android:scaleY="0.25"
-        android:translationX="165dp"
-        android:translationY="0dp"
-        map:srcCompat="@drawable/ic_logo_transparent" />
-
-    <ImageButton
-        android:id="@+id/imageButton9"
-        android:layout_width="66dp"
-        android:layout_height="62dp"
-        android:background="#00FFFFFF"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
-        android:translationY="10dp"
-        map:srcCompat="@drawable/ic_menu_black_48dp" />
-
-    <ImageButton
-        android:id="@+id/imageButton10"
-        android:layout_width="63dp"
-        android:layout_height="59dp"
-        android:background="#00FFFFFF"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
-        android:translationX="350dp"
-        android:translationY="10dp"
-        map:srcCompat="@drawable/ic_more_vert_black_48dp" />
-
-</FrameLayout> -->
+</androidx.drawerlayout.widget.DrawerLayout>
