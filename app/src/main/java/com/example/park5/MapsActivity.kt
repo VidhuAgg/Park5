@@ -39,11 +39,9 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.retrotry.network.Geometry
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationMenu
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -51,14 +49,25 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
-    NavigationView.OnNavigationItemSelectedListener {
+    NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var draw: DrawerLayout
 
+    //google's API for location services. Very important
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    //lateinit var locrequest: LocationRequest
+    private lateinit var lastLocation: Location
+
     //list for storing latlang of parking spots
     private var places = ArrayList<ArrayList<Double>>()
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,9 +96,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             .findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
-        //to set buttons on navigation bar unchecked when starts
-        //val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        //bottomnav.menu.getItem(0).isCheckable = false
+        //set properties of locationrequest
+        //locrequest.setInterval(1000 * 30) //change 30 & 5 to extract constants
+        //locrequest.setFastestInterval(1000 * 5)
+        //locrequest.setPriority(102)
+
 
         val bottomnav_left = findViewById<BottomNavigationView>(R.id.bottom_nav_left)
         val bottomnav_right = findViewById<BottomNavigationView>(R.id.bottom_nav_right)
@@ -99,7 +110,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         //for the center button
         // @TODO fix this
-        //ottomnav.itemIconTintList = null
+        //bottomnav.itemIconTintList = null
 
         //bottomnav seletor
         BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
@@ -148,9 +159,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //press button to find spots and add markers
         var fab: View = findViewById(R.id.parking)
         fab.setOnClickListener { view ->
-            var sp = LatLng(73.8567, 18.5204)
             findPos() { result ->
-                Log.d("lol", result.toString())
                 if (result != null) {
                     for (item in result) {
                         mMap.addMarker(
@@ -166,11 +175,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
                 //mMap.animateCamera(CameraUpdateFactory.zoomIn());
                 //mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
-                Log.d("letsee", result.toString())
             }
 
             //@TODO("temporary to see if button is being pressed")
-            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Finding parking spots", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .show()
         }
@@ -184,7 +192,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,mapFragment).commit()
             navigationView.setCheckedItem(R.id.map)
         }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
+
+    private fun setUpMap() {
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            return
+        }
+        // 1
+        mMap.isMyLocationEnabled = true
+
+        // 2
+        fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+            // Got last known location. In some rare situations this can be null.
+            // 3
+            if (location != null) {
+                lastLocation = location
+                val currentLatLng = LatLng(location.latitude, location.longitude)
+                placeMarkerOnMap(currentLatLng)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+            }
+        }
+    }
+
+
+    private fun placeMarkerOnMap(location: LatLng) {
+        // 1
+        val markerOptions = MarkerOptions().position(location)
+        // 2
+        mMap.addMarker(markerOptions)
+    }
+
 
     fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
@@ -194,6 +235,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 var body = response.body()
                 body?.features?.forEach {
                     places = it.geometry.coordinates
+                    Log.d("prop!", it.properties.ADDRESS)
                     callback(places)
                 }
             }
@@ -233,6 +275,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.getUiSettings().setZoomControlsEnabled(true)
+        mMap.setOnMarkerClickListener(this)
+
+        setUpMap()
+
+
     }
 
     //function for selecting fragments in navigation drawer
@@ -265,5 +313,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         draw.closeDrawer(GravityCompat.START)
         return true
     }
+
+    override fun onMarkerClick(p0: Marker?) = false
 }
 
