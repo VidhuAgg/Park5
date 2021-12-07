@@ -40,6 +40,7 @@
                 android:layout_height="75dp"
                 android:layout_gravity="bottom"
                 map:menu="@menu/bottom_navigation"
+                map:labelVisibilityMode="unlabeled"
                 android:background="@color/purple_500"/>
 
             <LinearLayout

@@ -347,12 +347,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
     private fun placeMarkerOnMap(location: LatLng) {
-        val markerOptions = MarkerOptions().position(location).icon(
+        var markerOptions = MarkerOptions().position(location).icon(
             bitmapDescriptorFromVector(
                 applicationContext,
                 R.drawable.ic_parksymbol
             ))
-
+        //@TODO("Find better values for anchor, responsible for weird marker positioning in different zoom levels")
+        //markerOptions.anchor(0.3F,0.0F)
+        // markerOptions.anchor(0.0F, 0.0f)
         val titleStr = getAddress(location)  // add these two lines
         markerOptions.title("here")
         mMap.addMarker(markerOptions)
@@ -415,9 +417,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.setOnMarkerClickListener(this)
         mMap.setPadding(0,160,0,200);
-        // move the compass to top center
-
-
         setUpMap()
     }
 
