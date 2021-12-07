@@ -54,6 +54,10 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import java.io.IOException
+import android.widget.RelativeLayout
+import androidx.fragment.app.FragmentActivity
+import java.lang.Exception
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener {
@@ -61,6 +65,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var draw: DrawerLayout
+    private val mapView: View? = null
+    private val TAG: String = MapsActivity::class.java.simpleName
+    private val GOOGLEMAP_COMPASS = "GoogleMapCompass"
 
     //google's API for location services. Very important
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -292,7 +299,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-    
+
     private fun setUpMap() {
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -401,12 +408,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.getUiSettings().setZoomControlsEnabled(true)
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+        mMap.uiSettings.isMyLocationButtonEnabled = true
+        mMap.uiSettings.isMapToolbarEnabled = true
+        mMap.uiSettings.isZoomControlsEnabled = true
         mMap.setOnMarkerClickListener(this)
+        mMap.setPadding(0,160,0,200);
+        // move the compass to top center
+
 
         setUpMap()
-
-
     }
 
     //function for selecting fragments in navigation drawer
