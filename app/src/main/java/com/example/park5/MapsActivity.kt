@@ -58,7 +58,6 @@ import android.widget.RelativeLayout
 import androidx.fragment.app.FragmentActivity
 import java.lang.Exception
 
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener {
 
@@ -87,8 +86,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         private const val REQUEST_CHECK_SETTINGS = 2
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -97,6 +94,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         setSupportActionBar(findViewById(R.id.toolbar))
         draw = findViewById<DrawerLayout>(R.id.drawer_layout)
+
+        supportActionBar?.setIcon(R.drawable.ic_parksymbol)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
