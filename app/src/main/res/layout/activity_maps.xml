@@ -34,36 +34,62 @@
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 map:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_nav_left"
-                android:layout_width="wrap_content"
-                android:layout_height="75dp"
-                android:layout_gravity="bottom"
-                map:menu="@menu/bottom_navigation"
-                map:labelVisibilityMode="unlabeled"
-                android:background="@color/purple_500"/>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom">
 
-            <LinearLayout
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:layout_width="match_parent"
+                    android:id="@+id/nav"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:layout_gravity="bottom"
+                    android:elevation="15dp"
+                    map:itemIconSize="34dp"
+                    android:background="@color/purple_500"
+                    map:menu="@menu/bottom_navigation_left"
+                    android:paddingLeft="5dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tofront"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_parkcenter"
+                    android:layout_gravity="center"
+                    android:scaleType="center"
+                    android:elevation="@android:dimen/app_icon_size"/>
+
+                </FrameLayout>
+
+            <!--<androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom">
 
-                <!-- For the image i want in the middle -->
-                <ImageView
-                    android:id="@+id/parkcenter"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_parkcenter" />
-            </LinearLayout>
+                <com.google.android.material.bottomappbar.BottomAppBar
+                    android:id="@+id/bottomAppBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_nav_right"
-                android:layout_width="wrap_content"
-                android:layout_height="75dp"
-                android:layout_gravity="bottom"
-                map:menu="@menu/bottom_navigation"
-                android:background="@color/purple_500"/>
+                    <com.google.android.material.bottomnavigation.BottomNavigationView
+                        android:id="@+id/bottomNavigationView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        map:menu="@menu/bottom_navigation_left" />
+
+                </com.google.android.material.bottomappbar.BottomAppBar>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_parkcenter"
+                    map:layout_anchor="@id/bottomAppBar" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
 
             <!-- Can be ignored -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton

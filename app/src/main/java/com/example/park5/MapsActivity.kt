@@ -122,15 +122,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //locrequest.setPriority(102)
 
 
-        val bottomnav_left = findViewById<BottomNavigationView>(R.id.bottom_nav_left)
-        val bottomnav_right = findViewById<BottomNavigationView>(R.id.bottom_nav_right)
-        bottomnav_left.menu.getItem(0).isCheckable = false
-        bottomnav_right.menu.getItem(0).isCheckable = false
+        val bottomnav = findViewById<BottomNavigationView>(R.id.nav)
+        //val bottomnav_right = findViewById<BottomNavigationView>(R.id.bottom_nav_right)
+        //bottomnav_left.menu.getItem(0).isCheckable = false
+        //bottomnav_right.menu.getItem(0).isCheckable = false
 
 
         //for the center button
         // @TODO fix this
-        //bottomnav.itemIconTintList = null
+        bottomnav.itemIconTintList = null
+        val front = findViewById<ImageView>(R.id.tofront)
+        front.bringToFront()
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
@@ -141,7 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
         //bottomnav seletor
-        BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
+        /*BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
 
                 R.id.nearme -> {
@@ -182,7 +184,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
 
 
-        }
+        }*/
 
         //press button to find spots and add markers
         var fab: View = findViewById(R.id.parking)

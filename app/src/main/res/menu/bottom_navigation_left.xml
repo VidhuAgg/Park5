@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nearme"
+        android:icon="@drawable/ic_outline_near_me"
+        android:title="Near me" />
+
+    <item
+        android:id="@+id/pay"
+        android:icon="@drawable/ic_outline_paid"
+        android:title="Pay"/>
+
+    <item
+        android:id="@+id/mainpark"
+        android:title=""/>
+
+    <item
+        android:id="@+id/savedLoc"
+        android:icon="@drawable/ic_beenhere_black_48dp"
+        android:title="Saved locations"/>
+
+    <item
+        android:id="@+id/report"
+        android:icon="@drawable/ic_report"
+        android:title="Report"/>
+
+</menu>

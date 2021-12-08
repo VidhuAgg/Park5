@@ -15,12 +15,18 @@
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/debug/res/layout/fragment_settings.xml" value="0.259375" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/debug/res/layout/fragment_support.xml" value="0.259375" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_baseline_local_parking_24.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_outline_near_me.xml" value="0.26205128205128203" />
+        <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_outline_paid.xml" value="0.26205128205128203" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_parkcenter.xml" value="0.2755208333333333" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_parksymbol.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_pay.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_report.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/drawable/ic_savedloc.xml" value="0.26205128205128203" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/layout/activity_maps.xml" value="0.264" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/layout/fragment_account.xml" value="0.223731884057971" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/layout/nav_header.xml" value="0.259375" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/menu/bottom_navigation.xml" value="0.259375" />
+        <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/menu/bottom_navigation_right.xml" value="0.25" />
         <entry key="..\:/Users/Yash/Desktop/KTH/Sem3-p2/Park5/app/src/main/res/menu/drawer_menu.xml" value="0.4" />
       </map>
     </option>
