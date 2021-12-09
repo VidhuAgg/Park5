@@ -67,6 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private val mapView: View? = null
     private val TAG: String = MapsActivity::class.java.simpleName
     private val GOOGLEMAP_COMPASS = "GoogleMapCompass"
+    lateinit var currentLatLng:LatLng
 
     //google's API for location services. Very important
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -140,7 +141,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 lastLocation = p0.lastLocation
             }
         }
-
 
         //bottomnav seletor
         BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
@@ -315,7 +315,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             // Got last known location. In some rare situations this can be null.
             if (location != null) {
                 lastLocation = location
-                val currentLatLng = LatLng(location.latitude, location.longitude)
+                currentLatLng = LatLng(location.latitude, location.longitude)
                 //placeMarkerOnMap(currentLatLng)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
             }
@@ -362,13 +362,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-
     private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
-        val call = service?.getPost()
+        val call = service?.getPost(100,currentLatLng.latitude,currentLatLng.longitude,"json","693167d9-7ce5-437a-90fd-030343a3bacf")
         call?.enqueue(object : Callback<Get> {
             override fun onResponse(call: Call<Get>, response: Response<Get>) {
                 var body = response.body()
+                Log.d("lat",currentLatLng.latitude.toString())
+                Log.d("lon",currentLatLng.longitude.toString())
+                Log.d("inside Reponse",body.toString())
                 body?.features?.forEach {
                     places = it.geometry.coordinates
                     Log.d("prop!", it.properties.ADDRESS)

@@ -1,5 +1,6 @@
 package com.example.park5.Objects
 
+import android.util.Log
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.park5.Interface.GetInterface
@@ -9,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object GetObject {
 
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "https://openparking.stockholm.se/LTF-Tolken/v1/"
+    private val BASE_URL = "https://openparking.stockholm.se"
 
     val retrofitInstance:Retrofit?
         get() {
@@ -21,4 +22,6 @@ object GetObject {
             }
             return retrofit
         }
+
 }
+
