@@ -95,7 +95,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         setSupportActionBar(findViewById(R.id.toolbar))
         draw = findViewById<DrawerLayout>(R.id.drawer_layout)
 
-        supportActionBar?.setIcon(R.drawable.ic_parksymbol)
+        //supportActionBar?.setIcon(R.drawable.logo)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
