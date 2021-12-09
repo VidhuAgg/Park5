@@ -112,15 +112,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         draw.addDrawerListener(toggle)
         toggle.syncState()
 
+
+        //clicking on park5 logo on top goes back to main screen, basically creates a new activity
+        val iv = findViewById<ImageView>(R.id.logocenter)
+        iv.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this,MapsActivity::class.java)
+            startActivity(intent)
+        })
+
+
+
         //getting map fragment & Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
-
-        //set properties of locationrequest
-        //locrequest.setInterval(1000 * 30) //change 30 & 5 to extract constants
-        //locrequest.setFastestInterval(1000 * 5)
-        //locrequest.setPriority(102)
 
 
         val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
@@ -192,15 +197,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 if (result != null) {
                     for (item in result) {
                         placeMarkerOnMap(LatLng(item[1], item[0]))
-                        /*
-                        mMap.addMarker(
-                            MarkerOptions().position(LatLng(item[1], item[0])).title("here").icon(
-                                bitmapDescriptorFromVector(
-                                    applicationContext,
-                                    R.drawable.ic_parksymbol
-                                )
-                            )
-                        )*/
                     }
                 }
                 //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
@@ -346,7 +342,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 
-
     private fun placeMarkerOnMap(location: LatLng) {
         var markerOptions = MarkerOptions().position(location).icon(
             bitmapDescriptorFromVector(
@@ -456,4 +451,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMarkerClick(p0: Marker?) = false
 }
+
 
