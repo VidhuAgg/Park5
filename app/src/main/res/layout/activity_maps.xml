@@ -49,15 +49,17 @@
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:layout_width="match_parent"
-                    android:id="@+id/nav"
+                    android:id="@+id/bottom_nav"
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
                     android:layout_gravity="bottom"
                     android:elevation="15dp"
                     map:itemIconSize="34dp"
                     android:background="@color/purple_500"
-                    map:menu="@menu/bottom_navigation_left"
+                    map:menu="@menu/bottom_navigation"
                     android:paddingLeft="5dp"
+                    map:itemIconTint="@drawable/select"
+                    map:itemTextColor="@drawable/select"
                     />
 
                 <ImageView

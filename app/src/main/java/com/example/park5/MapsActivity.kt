@@ -122,9 +122,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //locrequest.setPriority(102)
 
 
-        val bottomnav = findViewById<BottomNavigationView>(R.id.nav)
+        val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         //val bottomnav_right = findViewById<BottomNavigationView>(R.id.bottom_nav_right)
-        //bottomnav_left.menu.getItem(0).isCheckable = false
+        //bottomnav.menu.getItem(0).isCheckable = false
         //bottomnav_right.menu.getItem(0).isCheckable = false
 
 
@@ -143,7 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
         //bottomnav seletor
-        /*BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
+        BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
 
                 R.id.nearme -> {
@@ -183,8 +183,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 else -> false
             }
 
-
-        }*/
+        }
 
         //press button to find spots and add markers
         var fab: View = findViewById(R.id.parking)
