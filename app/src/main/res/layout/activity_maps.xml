@@ -61,6 +61,7 @@
                     android:paddingLeft="5dp"
                     map:itemIconTint="@drawable/select"
                     map:itemTextColor="@drawable/select"
+                    android:focusableInTouchMode="true"
                     />
 
                 <ImageView
