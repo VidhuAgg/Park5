@@ -50,13 +50,14 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationMenu
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
+
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import java.io.IOException
 import android.widget.RelativeLayout
 import androidx.fragment.app.FragmentActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import java.lang.Exception
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -68,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private val mapView: View? = null
     private val TAG: String = MapsActivity::class.java.simpleName
     private val GOOGLEMAP_COMPASS = "GoogleMapCompass"
-    lateinit var currentLatLng:LatLng
+    var currentLatLng:LatLng = LatLng(59.4023,17.9457)
 
     //google's API for location services. Very important
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -87,6 +88,83 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val REQUEST_CHECK_SETTINGS = 2
         private const val PARKING_API_KEY = "693167d9-7ce5-437a-90fd-030343a3bacf"
+    }
+
+    private val payFragment = Fragment_pay()
+    private val savedLocFragment = Fragment_SavedLoc()
+    private val reportFragment = Fragment_ReportError()
+
+
+    private val bottomNavItemSelected = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+
+            R.id.nearme -> {
+                item.isCheckable = true //here is the magic
+                findPos() { result ->
+                    if (result != null) {
+                        for (item in result) {
+                            placeMarkerOnMap(LatLng(item[1], item[0]))
+                        }
+                    }
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
+                    //mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                    //mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
+                }
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.pay -> {
+                item.isCheckable = true
+
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.park -> {
+                //go to forgot user fragment
+                item.isCheckable = true
+
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.savedLoc -> {
+                //go to forgot user fragment
+                item.isCheckable = true
+
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.report -> {
+                //go to forgot user fragment
+                item.isCheckable = true
+
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+        }
+        false
+    }
+
+    private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
+        val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
+        val call = service?.getPost(100,59.4023,17.9457,"json",
+            PARKING_API_KEY)
+        call?.enqueue(object : Callback<Get> {
+            override fun onResponse(call: Call<Get>, response: Response<Get>) {
+                var body = response.body()
+                Log.d("lat",currentLatLng.latitude.toString())
+                Log.d("lon",currentLatLng.longitude.toString())
+                Log.d("inside Reponse",body.toString())
+                body?.features?.forEach {
+                    places = it.geometry.coordinates
+                    Log.d("prop!", it.properties.ADDRESS)
+                    callback(places)
+                }
+            }
+
+            override fun onFailure(call: Call<Get>, t: Throwable) {
+                Toast.makeText(applicationContext, "Error reading JSON", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,10 +204,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             .findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
-        val bottomnav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomnav.isHapticFeedbackEnabled = true
-        bottomnav.menu.getItem(0).isChecked = false
+        val bottom = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottom.itemIconTintList = null
+        bottom.isHapticFeedbackEnabled = true
+        bottom.menu.getItem(2).isChecked = false
+        bottom.setOnNavigationItemSelectedListener(bottomNavItemSelected)
 
+
+        /*
         BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
 
@@ -170,11 +252,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 else -> false
             }
 
-        }
+        }*/
 
         //for the center button
         // @TODO fix this
-        bottomnav.itemIconTintList = null
         val front = findViewById<ImageView>(R.id.tofront)
         front.bringToFront()
 
@@ -185,7 +266,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
 
+
         //press button to find spots and add markers
+        /*
         var fab: View = findViewById(R.id.parking)
         fab.setOnClickListener { view ->
             findPos() { result ->
@@ -203,7 +286,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             Snackbar.make(view, "Finding parking spots", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .show()
-        }
+        }*/
 
         if (savedInstanceState == null) {
             //supportFragmentManager.beginTransaction().show(mapFragment).remove(supportFragmentManager
@@ -217,10 +300,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }// End of OnCreate
 
+
     private fun replaceFragment(fragment: Fragment){
         if(fragment != null){
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,fragment)
+            transaction.replace(R.id.map,fragment)
             transaction.commit()
         }
     }
@@ -346,34 +430,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //markerOptions.anchor(0.3F,0.0F)
         // markerOptions.anchor(0.0F, 0.0f)
         val titleStr = getAddress(location)  // add these two lines
-        markerOptions.title("here")
+        markerOptions.title("Spots:3").snippet("taxa 3: 15 kr/tim vardagar 7-19, 10 kr/tim dag före helgdag 11-17, Boende: 1100 kr/månad eller 75 kr/dygn")
         mMap.addMarker(markerOptions)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15F))
 
     }
 
-    private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
-        val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
-        val call = service?.getPost(100,currentLatLng.latitude,currentLatLng.longitude,"json",
-            PARKING_API_KEY)
-        call?.enqueue(object : Callback<Get> {
-            override fun onResponse(call: Call<Get>, response: Response<Get>) {
-                var body = response.body()
-                Log.d("lat",currentLatLng.latitude.toString())
-                Log.d("lon",currentLatLng.longitude.toString())
-                Log.d("inside Reponse",body.toString())
-                body?.features?.forEach {
-                    places = it.geometry.coordinates
-                    Log.d("prop!", it.properties.ADDRESS)
-                    callback(places)
-                }
-            }
 
-            override fun onFailure(call: Call<Get>, t: Throwable) {
-                Toast.makeText(applicationContext, "Error reading JSON", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
 
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
         return ContextCompat.getDrawable(context, vectorResId)?.run {
@@ -410,7 +473,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.setOnMarkerClickListener(this)
-        mMap.setPadding(0,160,0,200);
+        mMap.setPadding(0,250,0,180);
         setUpMap()
     }
 

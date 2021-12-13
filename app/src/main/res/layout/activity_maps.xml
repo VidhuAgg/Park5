@@ -103,7 +103,7 @@
             </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
 
 
-            <!-- Can be ignored -->
+            <!-- Can be ignored
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/parking"
                 android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
                 android:layout_gravity="end|center"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/parking"
-                android:src="@drawable/ic_parking" />
+                android:src="@drawable/ic_parking" />-->
 
         </FrameLayout>
 
