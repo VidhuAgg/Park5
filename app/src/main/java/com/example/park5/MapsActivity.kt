@@ -216,7 +216,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 lastLocation = p0.lastLocation
             }
         }
-        
+
         //press button to find spots and add markers
         /*
         var fab: View = findViewById(R.id.parking)
