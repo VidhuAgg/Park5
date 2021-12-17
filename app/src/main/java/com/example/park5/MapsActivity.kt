@@ -146,21 +146,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
-        val call = service?.getPost(100,59.4023,17.9457,"json",
+        val call = service?.getPost(100,currentLatLng.latitude,currentLatLng.longitude,"json",
             PARKING_API_KEY)
         call?.enqueue(object : Callback<Get> {
             override fun onResponse(call: Call<Get>, response: Response<Get>) {
                 var body = response.body()
-                Log.d("lat",currentLatLng.latitude.toString())
-                Log.d("lon",currentLatLng.longitude.toString())
-                Log.d("inside Reponse",body.toString())
                 body?.features?.forEach {
                     places = it.geometry.coordinates
-                    Log.d("prop!", it.properties.ADDRESS)
                     callback(places)
                 }
             }
-
             override fun onFailure(call: Call<Get>, t: Throwable) {
                 Toast.makeText(applicationContext, "Error reading JSON", Toast.LENGTH_LONG).show()
             }
@@ -210,50 +205,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         bottom.menu.getItem(2).isChecked = false
         bottom.setOnNavigationItemSelectedListener(bottomNavItemSelected)
 
-
-        /*
-        BottomNavigationView.OnNavigationItemSelectedListener { item: MenuItem ->
-            when (item.itemId) {
-
-                R.id.nearme -> {
-                    item.isCheckable = true //here is the magic
-
-                    //notify the listener
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.pay -> {
-                    item.isCheckable = true
-
-                    //notify the listener
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.park -> {
-                    //go to forgot user fragment
-                    item.isCheckable = true
-
-                    //notify the listener
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.savedLoc -> {
-                    //go to forgot user fragment
-                    item.isCheckable = true
-
-                    //notify the listener
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.report -> {
-                    //go to forgot user fragment
-                    item.isCheckable = true
-
-                    //notify the listener
-                    return@OnNavigationItemSelectedListener true
-                }
-
-                else -> false
-            }
-
-        }*/
-
         //for the center button
         // @TODO fix this
         val front = findViewById<ImageView>(R.id.tofront)
@@ -265,8 +216,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 lastLocation = p0.lastLocation
             }
         }
-
-
+        
         //press button to find spots and add markers
         /*
         var fab: View = findViewById(R.id.parking)
@@ -392,6 +342,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
     }
+
     private fun getAddress(latLng: LatLng): String {
         val geocoder = Geocoder(this)
         val addresses: List<Address>?
@@ -433,7 +384,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         markerOptions.title("Spots:3").snippet("taxa 3: 15 kr/tim vardagar 7-19, 10 kr/tim dag före helgdag 11-17, Boende: 1100 kr/månad eller 75 kr/dygn")
         mMap.addMarker(markerOptions)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15F))
-
     }
 
 
