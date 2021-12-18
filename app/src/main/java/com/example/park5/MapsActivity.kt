@@ -60,6 +60,8 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener {
@@ -107,16 +109,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                             placeMarkerOnMap(LatLng(item[1], item[0]))
                         }
                     }
-                    //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
-                    //mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                    //mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
                 }
                 //notify the listener
                 return@OnNavigationItemSelectedListener true
             }
             R.id.pay -> {
                 item.isCheckable = true
-
+                
                 //notify the listener
                 return@OnNavigationItemSelectedListener true
             }
@@ -147,7 +146,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
-        val call = service?.getPost(100,currentLatLng.latitude,currentLatLng.longitude,"json",
+        val call = service?.getPost(100,59.4023,17.9457,"json",
             PARKING_API_KEY)
         call?.enqueue(object : Callback<Get> {
             override fun onResponse(call: Call<Get>, response: Response<Get>) {
@@ -218,27 +217,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
 
-        //press button to find spots and add markers
-        /*
-        var fab: View = findViewById(R.id.parking)
-        fab.setOnClickListener { view ->
-            findPos() { result ->
-                if (result != null) {
-                    for (item in result) {
-                        placeMarkerOnMap(LatLng(item[1], item[0]))
-                    }
-                }
-                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15F))
-                //mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                //mMap.animateCamera(CameraUpdateFactory.zoomTo(15F), 1000, null);
-            }
-
-            //@TODO("temporary to see if button is being pressed")
-            Snackbar.make(view, "Finding parking spots", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .show()
-        }*/
-
         if (savedInstanceState == null) {
             //supportFragmentManager.beginTransaction().show(mapFragment).remove(supportFragmentManager
             //  .findFragmentById(R.id.fragment_container) as SupportMapFragment).commit()
@@ -250,7 +228,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }// End of OnCreate
-
 
     private fun replaceFragment(fragment: Fragment){
         if(fragment != null){
@@ -344,34 +321,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-    private fun getAddress(latLng: LatLng): String {
-        val geocoder = Geocoder(this)
-        val addresses: List<Address>?
-        val address: Address?
-        var addressText = ""
-
-        try {
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            if (null != addresses && addresses.isNotEmpty()) {
-                address = addresses[0]
-                for (i in 0 until address.maxAddressLineIndex) {
-                    addressText += if (i == 0) address.getAddressLine(i) else "\n" + address.getAddressLine(i)
-                }
-            }
-        } catch (e: IOException) {
-            Log.e("MapsActivity", e.localizedMessage)
-        }
-
-        return addressText
-    }
-
-    fun setCheckable(view: BottomNavigationView, checkable: Boolean) {
-        val menu: Menu = view.menu
-        for (i in 0 until menu.size()) {
-            menu.getItem(i).setCheckable(checkable)
-        }
-    }
-
     private fun placeMarkerOnMap(location: LatLng) {
         var markerOptions = MarkerOptions().position(location).icon(
             bitmapDescriptorFromVector(
@@ -381,13 +330,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //@TODO("Find better values for anchor, responsible for weird marker positioning in different zoom levels")
         //markerOptions.anchor(0.3F,0.0F)
         // markerOptions.anchor(0.0F, 0.0f)
-        val titleStr = getAddress(location)  // add these two lines
-        markerOptions.title("Spots:3").snippet("taxa 3: 15 kr/tim vardagar 7-19, 10 kr/tim dag före helgdag 11-17, Boende: 1100 kr/månad eller 75 kr/dygn")
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        markerOptions.title("Spots:3").snippet(addresses[0].getAddressLine(0).toString())
         mMap.addMarker(markerOptions)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15F))
     }
 
-
+    fun setCheckable(view: BottomNavigationView, checkable: Boolean) {
+        val menu: Menu = view.menu
+        for (i in 0 until menu.size()) {
+            menu.getItem(i).setCheckable(checkable)
+        }
+    }
 
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
         return ContextCompat.getDrawable(context, vectorResId)?.run {
@@ -427,7 +382,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.setPadding(0,250,0,180);
         setUpMap()
     }
-    //hi hi testing
+
     //function for selecting fragments in navigation drawer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.nav_account) {
