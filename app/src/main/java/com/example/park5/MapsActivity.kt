@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -164,6 +165,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -171,7 +173,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         setSupportActionBar(findViewById(R.id.toolbar))
         draw = findViewById<DrawerLayout>(R.id.drawer_layout)
 
-        //supportActionBar?.setIcon(R.drawable.logo)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
@@ -351,7 +352,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         try {
             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            if (null != addresses && !addresses.isEmpty()) {
+            if (null != addresses && addresses.isNotEmpty()) {
                 address = addresses[0]
                 for (i in 0 until address.maxAddressLineIndex) {
                     addressText += if (i == 0) address.getAddressLine(i) else "\n" + address.getAddressLine(i)
