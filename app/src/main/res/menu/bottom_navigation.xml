@@ -14,7 +14,9 @@
 
     <item
         android:id="@+id/park"
-        android:title="" />
+        android:title=""
+        android:enabled="false"
+        />
 
     <item
         android:id="@+id/savedLoc"

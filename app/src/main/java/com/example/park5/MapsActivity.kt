@@ -102,7 +102,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         when (item.itemId) {
 
             R.id.nearme -> {
-                item.isCheckable = true //here is the magic
+                //item.isCheckable = true //here is the magic
                 findPos() { result ->
                     if (result != null) {
                         for (item in result) {
@@ -114,16 +114,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 return@OnNavigationItemSelectedListener true
             }
             R.id.pay -> {
-                item.isCheckable = true
-                
+                //item.isCheckable = true
                 //notify the listener
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.park -> {
-                //go to forgot user fragment
+            R.id.park->{
                 item.isCheckable = true
-
-                //notify the listener
                 return@OnNavigationItemSelectedListener true
             }
             R.id.savedLoc -> {
@@ -335,13 +331,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         markerOptions.title("Spots:3").snippet(addresses[0].getAddressLine(0).toString())
         mMap.addMarker(markerOptions)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15F))
-    }
-
-    fun setCheckable(view: BottomNavigationView, checkable: Boolean) {
-        val menu: Menu = view.menu
-        for (i in 0 until menu.size()) {
-            menu.getItem(i).setCheckable(checkable)
-        }
     }
 
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
