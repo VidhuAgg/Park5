@@ -427,7 +427,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.setPadding(0,250,0,180);
         setUpMap()
     }
-
+    //hi hi testing
     //function for selecting fragments in navigation drawer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.nav_account) {
