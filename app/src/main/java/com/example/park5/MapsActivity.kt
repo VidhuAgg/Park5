@@ -184,8 +184,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         toggle.syncState()
 
         //clicking on park5 logo on top goes back to main screen, basically creates a new activity
-        val iv = findViewById<ImageView>(R.id.logocenter)
-        iv.setOnClickListener(View.OnClickListener {
+        val park5logo = findViewById<ImageView>(R.id.logocenter)
+        park5logo.setOnClickListener(View.OnClickListener {
             val intent = Intent(this,MapsActivity::class.java)
             startActivity(intent)
         })
@@ -205,6 +205,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         // @TODO fix this
         val front = findViewById<ImageView>(R.id.tofront)
         front.bringToFront()
+        front.setOnClickListener(View.OnClickListener {
+             // @TODO add scan fragment
+            Toast.makeText(applicationContext,"Parking",Toast.LENGTH_LONG).show()
+        })
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
