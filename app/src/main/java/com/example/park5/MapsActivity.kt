@@ -98,47 +98,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private val reportFragment = Fragment_ReportError()
 
 
-    private val bottomNavItemSelected = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
 
-            R.id.nearme -> {
-                //item.isCheckable = true //here is the magic
-                findPos() { result ->
-                    if (result != null) {
-                        for (item in result) {
-                            placeMarkerOnMap(LatLng(item[1], item[0]))
-                        }
-                    }
-                }
-                //notify the listener
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.pay -> {
-                //item.isCheckable = true
-                //notify the listener
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.park->{
-                item.isCheckable = true
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.savedLoc -> {
-                //go to forgot user fragment
-                item.isCheckable = true
-
-                //notify the listener
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.report -> {
-                //go to forgot user fragment
-                item.isCheckable = true
-
-                //notify the listener
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
 
     private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
@@ -224,16 +184,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             //supportFragmentManager.beginTransaction().remove(mapFragment).commit()
             //supportFragmentManager.executePendingTransactions()
             //supportFragmentManager.beginTransaction().replace(R.id.fragment_container,mapFragment).commit()
-            navigationView.setCheckedItem(R.id.map)
+            //navigationView.setCheckedItem(R.id.map)
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }// End of OnCreate
 
     private fun replaceFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment).commit()
         if(fragment != null){
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.map,fragment)
-            transaction.commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit()
         }
     }
 
@@ -287,6 +248,48 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 startLocationUpdates()
             }
         }
+    }
+    private val bottomNavItemSelected = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.nearme -> {
+                //item.isCheckable = true //here is the magic
+                findPos() { result ->
+                    if (result != null) {
+                        for (item in result) {
+                            placeMarkerOnMap(LatLng(item[1], item[0]))
+                        }
+                    }
+                }
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.pay -> {
+                //item.isCheckable = true
+                //notify the listener
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, Fragment_pay()).commit()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.park->{
+                item.isCheckable = true
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.savedLoc -> {
+                //go to forgot user fragment
+                item.isCheckable = true
+
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.report -> {
+                //go to forgot user fragment
+                item.isCheckable = true
+
+                //notify the listener
+                return@OnNavigationItemSelectedListener true
+            }
+        }
+        false
     }
 
     override fun onPause() {
