@@ -8,46 +8,62 @@
     android:fitsSystemWindows="true"
     tools:context=".MapsActivity">
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Can be ignored -->
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+            <FrameLayout
+                android:id="@+id/header"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible" />
-            <!-- Can be ignored -->
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/purple_500"
-                android:elevation="4dp"
-                android:minHeight="100dp"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                map:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/logocenter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/logo"
-                    android:layout_gravity="center|center_horizontal"/>
-            </androidx.appcompat.widget.Toolbar>
-
-                <FrameLayout
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom">
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/purple_500"
+                    android:elevation="4dp"
+                    android:minHeight="100dp"
+                    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                    map:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+                    <ImageView
+                        android:id="@+id/logocenter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/logo"
+                        android:layout_gravity="center|center_horizontal"/>
+                </androidx.appcompat.widget.Toolbar>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/header"
+                android:id="@+id/fragment_container"
+                >
+
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                >
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:layout_width="match_parent"
@@ -66,20 +82,20 @@
                     />
 
                 <ImageView
-                    android:layout_width="wrap_content"
                     android:id="@+id/tofront"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_parkcenter"
                     android:layout_gravity="center"
+                    android:elevation="@android:dimen/app_icon_size"
                     android:scaleType="center"
-                    android:elevation="@android:dimen/app_icon_size"/>
+                    android:src="@drawable/ic_parkcenter" />
 
-                </FrameLayout>
+            </FrameLayout>
 
-        </FrameLayout>
+        </RelativeLayout>
 
-    </LinearLayout>
-    <!-- Can be ignored -->
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

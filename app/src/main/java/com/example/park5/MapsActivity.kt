@@ -93,13 +93,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         private const val PARKING_API_KEY = "693167d9-7ce5-437a-90fd-030343a3bacf"
     }
 
-    private val payFragment = Fragment_pay()
-    private val savedLocFragment = Fragment_SavedLoc()
-    private val reportFragment = Fragment_ReportError()
-
-
-
-
     private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
         val call = service?.getPost(100,59.4023,17.9457,"json",
@@ -145,10 +138,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         //clicking on park5 logo on top goes back to main screen, basically creates a new activity
         val park5logo = findViewById<ImageView>(R.id.logocenter)
-        park5logo.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this,MapsActivity::class.java)
+        park5logo.setOnClickListener {
+            val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
-        })
+        }
 
         //getting map fragment & Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -164,11 +157,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //for the center button
         // @TODO fix this
         val front = findViewById<ImageView>(R.id.tofront)
-        front.bringToFront()
-        front.setOnClickListener(View.OnClickListener {
-             // @TODO add scan fragment
-            Toast.makeText(applicationContext,"Parking",Toast.LENGTH_LONG).show()
-        })
+        front.setOnClickListener {
+            // @TODO add scan fragment
+            Toast.makeText(applicationContext, "Parking", Toast.LENGTH_LONG).show()
+        }
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
@@ -189,14 +181,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }// End of OnCreate
 
-    private fun replaceFragment(fragment: Fragment){
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment).commit()
-        if(fragment != null){
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment).commit()
-        }
-    }
+
 
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this,
@@ -260,32 +245,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                         }
                     }
                 }
-                //notify the listener
                 return@OnNavigationItemSelectedListener true
             }
             R.id.pay -> {
                 //item.isCheckable = true
-                //notify the listener
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, Fragment_pay()).commit()
+                replaceFragment(Fragment_pay())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.park->{
-                item.isCheckable = true
+                //item.isCheckable = true
                 return@OnNavigationItemSelectedListener true
             }
             R.id.savedLoc -> {
-                //go to forgot user fragment
-                item.isCheckable = true
-
-                //notify the listener
+                replaceFragment(Fragment_SavedLoc())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.report -> {
-                //go to forgot user fragment
-                item.isCheckable = true
-
-                //notify the listener
+                //item.isCheckable = true
+                replaceFragment(Fragment_ReportError())
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -358,6 +335,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -382,32 +360,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     //function for selecting fragments in navigation drawer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.nav_account) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, Fragment_Myaccount()).commit()
+            replaceFragment(Fragment_Myaccount())
         } else {
             if (item.itemId == R.id.nav_help) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, Fragment_help()).commit()
+                replaceFragment(Fragment_help())
             } else {
                 if (item.itemId == R.id.nav_history) {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, Fragment_history()).commit()
+                    replaceFragment(Fragment_history())
                 } else {
                     if (item.itemId == R.id.nav_settings) {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, Fragment_settings()).commit()
+                        replaceFragment(Fragment_settings())
                     } else {
                         if (item.itemId == R.id.nav_support) {
-                            supportFragmentManager.beginTransaction()
-                                .replace(R.id.fragment_container, Fragment_support()).commit()
+                            replaceFragment(Fragment_support())
                         }
                     }
                 }
             }
         }
-
         draw.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun replaceFragment(fragment: Fragment){
+        if(fragment != null){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit()
+        }
     }
 
     override fun onMarkerClick(p0: Marker?) = false
