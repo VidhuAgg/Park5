@@ -9,22 +9,15 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.park5.Interface.GetInterface
 import com.example.park5.Objects.GetObject
@@ -39,27 +32,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.example.retrotry.network.Geometry
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.*
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.material.bottomnavigation.BottomNavigationMenu
-
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
-import java.io.IOException
-import android.widget.RelativeLayout
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -69,10 +51,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var draw: DrawerLayout
-    private val mapView: View? = null
-    private val TAG: String = MapsActivity::class.java.simpleName
-    private val GOOGLEMAP_COMPASS = "GoogleMapCompass"
-    var currentLatLng:LatLng = LatLng(59.4023,17.9457)
+    //private val mapView: View? = null
+    //private val TAG: String = MapsActivity::class.java.simpleName
+    //private val GOOGLEMAP_COMPASS = "GoogleMapCompass"
+    private var currentLatLng:LatLng = LatLng(59.4023,17.9457)
 
     //google's API for location services. Very important
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -113,6 +95,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //@TODO(Might remove this)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
@@ -238,7 +221,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         when (item.itemId) {
             R.id.nearme -> {
                 //item.isCheckable = true //here is the magic
-                findPos() { result ->
+                findPos { result ->
                     if (result != null) {
                         for (item in result) {
                             placeMarkerOnMap(LatLng(item[1], item[0]))
@@ -302,7 +285,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun placeMarkerOnMap(location: LatLng) {
-        var markerOptions = MarkerOptions().position(location).icon(
+        val markerOptions = MarkerOptions().position(location).icon(
             bitmapDescriptorFromVector(
                 applicationContext,
                 R.drawable.ic_parksymbol
@@ -353,7 +336,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.setOnMarkerClickListener(this)
-        mMap.setPadding(0,250,0,180);
+        mMap.setPadding(0,250,0,180)
         setUpMap()
     }
 
@@ -383,10 +366,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun replaceFragment(fragment: Fragment){
-        if(fragment != null){
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment).commit()
-        }
     }
 
     override fun onMarkerClick(p0: Marker?) = false
