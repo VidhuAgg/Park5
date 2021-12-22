@@ -7,8 +7,34 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Report Error"
+        android:text="Report a problem"
         android:textSize="30sp"
-        android:layout_centerInParent="true" />
+        android:textColor="@color/purple_700"
+        android:id="@+id/ReportProblem"/>
+
+    <EditText
+        android:id="@+id/TextEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:layout_below="@+id/ReportProblem"
+        android:background="@drawable/custom_input"
+        android:layout_marginTop="20dp"
+        android:inputType="textEmailAddress"
+        android:hint="Enter your email"
+        android:textColor="@color/teal_700"
+        />
+
+    <EditText
+        android:id="@+id/TextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/TextEmailAddress"
+        android:background="@drawable/custom_input"
+        android:inputType="textMultiLine"
+        android:hint="What went wrong?"/>
+
 
 </RelativeLayout>
