@@ -13,7 +13,7 @@ class Fragment_ReportError: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment__report_error,container,false)
+        return inflater.inflate(R.layout.fragment_report_error,container,false)
     }
 
 

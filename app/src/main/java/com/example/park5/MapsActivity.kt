@@ -164,8 +164,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }// End of OnCreate
 
-
-
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
