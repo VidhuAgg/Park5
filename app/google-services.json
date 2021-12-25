@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "188004395758",
+    "project_id": "first-project-park5",
+    "storage_bucket": "first-project-park5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188004395758:android:6145acf71cc3f9e2ace1ff",
+        "android_client_info": {
+          "package_name": "com.example.park5"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188004395758-jakdgq5tm494n26fhad8b884t1peeo2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKkCUnF4Q4tQVhIbE2v3g6xMdamr9cfTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "188004395758-jakdgq5tm494n26fhad8b884t1peeo2p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
