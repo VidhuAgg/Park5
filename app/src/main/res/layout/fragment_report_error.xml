@@ -1,37 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="520dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/teal_700">
 
     <TextView
         android:id="@+id/ReportProblem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:text="Report a problem"
         android:textColor="@color/purple_700"
-        android:textSize="30sp"
-        android:layout_marginBottom="10dp"/>
+        android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/picturebutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ReportProblem"
-        android:layout_centerHorizontal="true"
-        />
-
-    <Spinner
-        android:id="@+id/problemDropDown"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/picturebutton"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"
-        />
+        android:layout_height="match_parent"
+        android:layout_below="@id/ReportProblem"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="160dp"
+        >
 
+        <Button
+            android:id="@+id/picturebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Click a picture"
+            />
 
+        <Spinner
+            android:id="@+id/problemDropDown"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:dropDownSelector="@color/teal_700"
+            />
+
+    </LinearLayout>
 
 
     <!--<com.google.android.material.textfield.TextInputLayout
