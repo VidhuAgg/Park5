@@ -44,6 +44,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import java.util.*
 import kotlin.collections.ArrayList
+import android.app.ProgressDialog
+import android.widget.ProgressBar
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener {
