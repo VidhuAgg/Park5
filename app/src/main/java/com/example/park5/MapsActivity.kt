@@ -45,7 +45,27 @@ import com.google.android.material.navigation.NavigationView
 import java.util.*
 import kotlin.collections.ArrayList
 import android.app.ProgressDialog
+import android.icu.text.IDNA
+import android.util.Log
 import android.widget.ProgressBar
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
+import com.google.firebase.ktx.options
+import com.google.firebase.database.DatabaseError
+
+import androidx.annotation.NonNull
+import androidx.fragment.app.FragmentActivity
+import com.example.park5.DataClasses.DB
+import com.example.park5.DataClasses.Information
+
+import com.google.firebase.database.DataSnapshot
+
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import kotlin.math.log
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -57,7 +77,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     //private val mapView: View? = null
     //private val TAG: String = MapsActivity::class.java.simpleName
     //private val GOOGLEMAP_COMPASS = "GoogleMapCompass"
-    private var currentLatLng:LatLng = LatLng(59.4023,17.9457)
+    private var currentLatLng:LatLng = LatLng(59.4046833,17.9477816)
 
     //google's API for location services. Very important
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -66,6 +86,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     //list for storing latlang of parking spots
     private var places = ArrayList<ArrayList<Double>>()
+    private var infoList = ArrayList<Information>()
+
+    private lateinit var database: DatabaseReference
 
     //for location updates
     private lateinit var locationCallback: LocationCallback
@@ -80,7 +103,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun findPos(callback: (ArrayList<ArrayList<Double>>?) -> Unit) {
         val service = GetObject.retrofitInstance?.create(GetInterface::class.java)
-        val call = service?.getPost(100,59.4023,17.9457,"json",
+        val call = service?.getPost(100,59.4046833,17.9477816,"json",
             PARKING_API_KEY)
         call?.enqueue(object : Callback<Get> {
             override fun onResponse(call: Call<Get>, response: Response<Get>) {
@@ -296,9 +319,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         // markerOptions.anchor(0.0F, 0.0f)
         val geocoder = Geocoder(this, Locale.getDefault())
         val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        markerOptions.title("Spots:3").snippet(addresses[0].getAddressLine(0).toString())
-        mMap.addMarker(markerOptions)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15F))
+        var data =""
+        database = FirebaseDatabase.getInstance().getReference("features")
+        database.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                if(p0.exists()){
+                    for (beaconSnapshot in p0.children) {
+                        val mBeacon: Information? = beaconSnapshot.getValue(Information::class.java)
+                        if (mBeacon != null) {
+                            if(mBeacon.y == location.latitude && mBeacon.x == location.longitude){
+                                data = "Spots:" + mBeacon.spots.toString()
+                                Log.d("Data",data)
+                                break;
+                            } else {
+                                data = "Spots: No Data"
+                            }
+                        }
+                    }
+                }
+                markerOptions.title(data).snippet(addresses[0].getAddressLine(0).toString())
+                mMap.addMarker(markerOptions)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15F))
+            }
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("Readfailed",p0.code.toString())
+            }
+        })
+
     }
 
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {

@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "188004395758",
-    "project_id": "first-project-park5",
-    "storage_bucket": "first-project-park5.appspot.com"
+    "project_number": "947688227696",
+    "firebase_url": "https://park5-11946969-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "park5-11946969",
+    "storage_bucket": "park5-11946969.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:188004395758:android:6145acf71cc3f9e2ace1ff",
+        "mobilesdk_app_id": "1:947688227696:android:07b0224e2caded60a005b5",
         "android_client_info": {
           "package_name": "com.example.park5"
         }
       },
       "oauth_client": [
         {
-          "client_id": "188004395758-jakdgq5tm494n26fhad8b884t1peeo2p.apps.googleusercontent.com",
+          "client_id": "947688227696-bkkj00n4vdb0r5sif7prphbom9r582bf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCKkCUnF4Q4tQVhIbE2v3g6xMdamr9cfTk"
+          "current_key": "AIzaSyB70CsvbHcG7M3w-mDFUV3wCJ_tplOAWNc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "188004395758-jakdgq5tm494n26fhad8b884t1peeo2p.apps.googleusercontent.com",
+              "client_id": "947688227696-bkkj00n4vdb0r5sif7prphbom9r582bf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
