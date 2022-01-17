@@ -7,6 +7,7 @@ import com.example.park5.Interface.GetInterface
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+
 object GetObject {
 
     private var retrofit: Retrofit? = null
